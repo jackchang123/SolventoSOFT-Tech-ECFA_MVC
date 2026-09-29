@@ -1,0 +1,51 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewData["Title"] = ViewBag.TitleName;
+}
+
+<form action="/CodeList/CodeListResult" method="gget" class="search-row">
+    <input type="hidden" name="type" value="@Context.Request.Query["type"]" />
+    <!-- 標題列 -->
+    <div class="title-row">
+        <h2>@ViewBag.TitleName</h2>
+    </div>
+
+    <div class="search-box">
+        <div class="search-row">
+            <div class="form-group">
+                <div class="label">
+                    <label class="control-label">
+                        @if (Context.Request.Query["type"] == "1")
+                        {
+                            <text>我出口至大陸貨品號列(大陸降稅):</text>
+                        }
+                        else if (Context.Request.Query["type"] == "2")
+                        {
+                            <text>大陸出口至我國貨品號列(台灣降稅)：</text>
+                        }
+                    </label>
+                </div>
+                <div class="field">
+                    <input type="text" name="code" placeholder="請輸入2-8碼貨品號列" class="form-control" value="" autocomplete="off">
+                    <span class="error-prompt">輸入錯誤！</span>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button type="submit" class="button button-gray">查詢</button>
+            </div>
+        </div>
+        <div class="download-file">
+            @if (Context.Request.Query["type"] == "1")
+            {
+                <a href="/api/dowload?path=ECFADoc/ECFA早收清單大陸方面減讓稅號對照台灣方面稅號2026版20251230.ods" title="ECFA早收清單大陸方面減讓稅號對照台灣方面稅號.ods（ods檔案下載）">ECFA早收清單大陸方面減讓稅號對照台灣方面稅號</a>
+            }
+            else if (Context.Request.Query["type"] == "2")
+            {
+                <a href="/api/dowload?path=ECFADoc/ECFA早收清單台灣方面減讓稅號對照大陸方面稅號2026版20251230.ods" title="ECFA早收清單台灣方面減讓稅號對照大陸方面稅號.ods（ods檔案下載）">ECFA早收清單台灣方面減讓稅號對照大陸方面稅號</a>
+            }
+        </div>
+    </div>
+</form>
+@section Styles {
+    <script src="~/js/main.js"></script>
+}

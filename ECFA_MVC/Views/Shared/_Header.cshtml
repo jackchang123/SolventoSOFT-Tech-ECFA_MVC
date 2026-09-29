@@ -1,0 +1,130 @@
+﻿<!-- 桌機nav -->
+<header>
+    <div class="header-top">
+        <div class="wrap">
+            <div class="header-logo">
+                <a asp-controller="Home" asp-action="Index" title="回到首頁" aria-label="回到ECFA兩岸經濟合作架構協議首頁">
+                    <img src="~/images/icon_link_ECFA.svg" alt="">
+                </a>
+            </div>
+            <div class="header-tools">
+                <a href="#key_U" id="key_U" class="goHead visually-hidden" title="Alt+U 上方導覽區塊"
+                   accesskey="U">:::</a>
+                <nav class="header-links" aria-label="快速連結">
+                    <ul>
+                        <li>
+                            <a asp-controller="Home" asp-action="Index" title="回首頁">回首頁</a>
+                        </li>
+                        <li>
+                            <a href="./Sitemap" title="網站導覽">網站導覽</a>
+                        </li>
+                        <li>
+                            <a href="./ServiceResponse" title="聯絡我們">聯絡我們</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <span class="divide" aria-hidden="true"></span>
+
+                <div class="fontsize-control">
+                    <button type="button" class="fontsize-toggle" aria-haspopup="true"
+                            aria-controls="fontSizeDropdownList" aria-expanded="false"
+                            aria-label="字體大小設定">
+                        字體
+                    </button>
+
+                    <div class="fontsize-list" id="fontSizeDropdownList">
+                        <button type="button" class="font-btn font-large" title="字體大"
+                                aria-pressed="false">
+                            大
+                        </button>
+                        <button type="button" class="font-btn font-medium active" title="字體中"
+                                aria-pressed="true">
+                            中
+                        </button>
+                        <button type="button" class="font-btn font-small" title="字體小"
+                                aria-pressed="false">
+                            小
+                        </button>
+                    </div>
+                </div>
+
+                <div class="all-search">
+                    <button type="button" class="button-allsearch" aria-label="展開全站搜尋選單"
+                            aria-controls="allSearchPanel" aria-expanded="false" aria-haspopup="true">
+                        <img src="~/images/icon_search_black.svg" alt="搜尋圖標">
+                    </button>
+
+                    <div class="allsearch-panel" id="allSearchPanel" hidden aria-hidden="true">
+                        <form class="search-bar" onsubmit="return false;">
+                            <div class="form-group column">
+                                <div class="label">
+                                    <label class="control-label">關鍵字</label>
+                                </div>
+                                <div class="field">
+                                    <input type="text" placeholder="請輸入關鍵字" class="form-control search-input" autocomplete="off">
+                                    <span class="error-prompt">輸入錯誤！</span>
+                                </div>
+                            </div>
+                            <button type="submit" name="submitBtnSearch" aria-label="送出關鍵字查詢"
+                                    title="查詢"></button>
+                        </form>
+@*                         <div class="hot-keyword flex-row">
+                            <div class="label">熱門關鍵字：</div>
+                            <div class="content">
+                                <ul class="flex-row flex-wrap">
+                                    <li><a href="#" title="海峽兩岸">海峽兩岸</a></li>
+                                    <li><a href="#" title="經濟合作">經濟合作</a></li>
+                                </ul>
+                            </div>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        @await Component.InvokeAsync("MainMenu")
+    </div>
+</header>
+
+<!-- 平板、手機nav -->
+<div class="mobile-nav">
+    <div class="mobile-nav-header">
+        <div class="logo">
+            <a asp-controller="Home" asp-action="Index" title="回到首頁" aria-label="回到ECFA兩岸經濟合作架構協議首頁">
+                <img src="~/images/icon_link_ECFA.svg" alt="">
+            </a>
+        </div>
+        <button type="button" aria-controls="mobileMenu" aria-expanded="false" aria-label="開啟手機版選單"
+                class="mobile-nav-btn"></button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-search">
+            <form class="search-bar" onsubmit="return false;">
+                <div class="form-group column">
+                    <div class="label">
+                        <label class="control-label">關鍵字</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" placeholder="請輸入關鍵字" class="form-control search-input" autocomplete="off">
+                        <span class="error-prompt">輸入錯誤！</span>
+                    </div>
+                </div>
+                <button type="submit" name="submitBtnSearch" aria-label="送出關鍵字查詢" title="查詢"></button>
+            </form>
+@*             <div class="hot-keyword flex-row">
+                <div class="label">熱門關鍵字：</div>
+                <div class="content">
+                    <ul class="flex-row flex-wrap">
+                        <li><a href="#" title="海峽兩岸">海峽兩岸</a></li>
+                        <li><a href="#" title="經濟合作">經濟合作</a></li>
+                    </ul>
+                </div>
+            </div> *@
+        </div>
+        @await Component.InvokeAsync("MainMenu", new { viewName = "Mobile" })
+    </div>
+</div>
+<div class="mobile-overlay" aria-hidden="true"></div>

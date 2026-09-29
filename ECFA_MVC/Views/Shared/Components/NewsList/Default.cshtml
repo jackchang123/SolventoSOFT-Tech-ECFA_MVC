@@ -1,0 +1,53 @@
+﻿@model List<News>
+
+<section class="section news-section">
+    <div class="wrap">
+        <h2 class="title">
+            <img src="@Url.Content("~/images/icon_speaker.svg")" alt="">
+            <span>最新消息</span>
+        </h2>
+
+        <div class="table-container">
+            <table class="list-table">
+                <caption class="sr-only">最新消息相關頁面列表</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="col-fixed">日期</th>
+                        <th scope="col">標題</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <th scope="row" class="text-left text-darkblue">
+                                    @(item.NtPubDate?.ToString("yyyy/MM/dd") ?? "")
+                                </th>
+                                <td class="text-left">
+                                    <a href="@Url.Action("ShowNew", "News", new { pid = item.NtId, nid = 1139 })" class="link" title="@item.NtTitle">
+                                        <span class="ellipsis">@item.NtTitle</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center">目前暫無最新消息</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="btn-row">
+            <a href="@Url.Action("Index", "News")">
+                <img src="@Url.Content("~/images/icon_arrow_green.svg")" alt="" class="icon">
+                查看更多消息
+            </a>
+        </div>
+    </div>
+</section>

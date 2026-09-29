@@ -1,0 +1,49 @@
+﻿@model List<ECFA_MVC.ViewModels.MenuViewModel>
+
+<div class="sitemap-group">
+    @{
+        int mainIndex = 1;
+    }
+    @foreach (var item in Model)
+    {
+        var hasSubMenu = item.SubMenus != null && item.SubMenus.Any();
+        string currentPrefix = $"{mainIndex}.";
+        <div class="sitemap-item">
+            <div class="sitemap-head">
+                <h3>@currentPrefix @item.Title</h3>
+            </div>
+            <div class="sitemap-body">
+            @if (hasSubMenu)
+            {
+                <ul class="list-style-disc">
+                    @foreach (var subItem in item.SubMenus!)
+                    {
+                        var l2HasSub = subItem.SubMenus != null && subItem.SubMenus.Any();
+                        <li>
+                            <a class="@(l2HasSub ? "sf-with-ul" : null)" href="@subItem.Url" title="@subItem.Title">
+                                <span>
+                                    @subItem.Title
+                                </span>
+                            </a>
+                            @if (l2HasSub)
+                            {
+                                <ul>
+                                    @foreach (var l3 in subItem.SubMenus!)
+                                    {
+                                        <li>
+                                            <a href="@l3.Url" target="@l3.Target" title="@l3.Title">
+                                                @l3.Title
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            </div>
+        </div>
+        mainIndex++;
+    }
+</div>

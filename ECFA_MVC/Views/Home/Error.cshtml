@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "錯誤訊息";
+}
+<!-- 主要內容區 -->
+<main>
+    <div class="wrap">
+        <a href="#key_C" id="key_C" accesskey="C" title="Alt+C 主要內容區" class="visually-hidden">:::</a>
+
+        <div class="main-wrap">
+
+            <!-- 主要內容 -->
+            <div class="main-content">
+                <div class="error-block">
+                    <div class="error-info">
+                        <img src="~/images/icon_error_red.svg" alt="錯誤訊息icon">
+                        <div class="error-block-head">
+                            您好：目前存取的頁面已移除不存在(或您採用不正常程序開啟)。
+                        </div>
+                        <div class="error-block-body">
+                            若有疑問請以電子郵件 <a href="email:tradeweb@trade.gov.tw">tradeweb@trade.gov.tw</a><br>內註明操作步驟，並留下您的聯絡電話，會立即處理，感謝您。
+                        </div>
+                    </div>
+                    <div class="btn-back">
+                        <a href="~/" class="button button-gray">
+                            <img src="~/images/icon_return_black.svg" alt="" class="icon">
+                            返回首頁
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+    <link rel="stylesheet" href="~/css/style.css">
+}

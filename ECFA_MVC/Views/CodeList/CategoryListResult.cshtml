@@ -1,0 +1,169 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewData["Title"] = ViewBag.TitleName;
+}
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@ViewBag.TitleName</h2>
+</div>
+
+<div class="search-box">
+    <div class="search-row column">
+        <div class="form-group">
+            <div class="label">
+                <label class="control-label">清單類別：</label>
+            </div>
+            <div class="field">
+                <select id="categorySelect" class="form-control" required>
+                    <option value="2" selected>台灣 => 大陸</option>
+                    <option value="1">大陸 => 台灣</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label">
+                <label class="control-label">貨品號列：</label>
+            </div>
+            <div class="field">
+                <input id="codeQuery" type="text" placeholder="請輸入陸方號列(大陸降稅) ，2-8碼貨品號列，例如：04、0403"
+                       class="form-control" autocomplete="off">
+                <span class="error-prompt">輸入錯誤！</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label">
+                <label class="control-label">貨品名稱：</label>
+            </div>
+            <div class="field">
+                <input id="nameQuery" type="text" placeholder="請輸入貨品名稱關鍵字，例如：米、魚" class="form-control" value="" autocomplete="off">
+                <span class="error-prompt">輸入錯誤！</span>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button id="resetBtn" class="button button-border-default">重設條件</button>
+            <button id="submitBtn" class="button button-gray">送出查詢</button>
+        </div>
+    </div>
+</div>
+
+<div class="search-result-box">
+    <div class="table-container scrollTable">
+        <table class="default-table primary-table" style="min-width: 962px;">
+            <caption>查詢結果</caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="text-left" style="width: 110px;">清單類別</th>
+                    <th scope="col" class="text-left" style="width: 110px;">貨品號列</th>
+                    <th scope="col" class="text-left">貨品名稱</th>
+                    <th scope="col" class="text-right" style="width: 197px;">稅率</th>
+                </tr>
+            </thead>
+            <tbody id="data-table-body">
+                <!-- 此為無資料時的表格欄位樣式 -->
+                <tr>
+                    <td class="text-center no-info" colspan="4">暫時無查詢結果！</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="result-img">
+        <img id="resultImage" src="" alt="描述" onerror="$(this).hide();">
+    </div>
+</div>
+@section Styles {
+    <script>
+        $(document).ready(function() {
+            const $submitBtn = $("#submitBtn");
+            const $tbody = $("#data-table-body");
+
+            // 確保按鈕存在
+            if ($("#resetBtn").length) {
+                // 綁定特定頁面專屬的額外清除邏輯
+                $("#resetBtn").on('click', function(e) {
+                    $tbody.html("<tr><td class='text-center no-info' colspan ='4'>暫時無查詢結果！</td></tr> ");
+                    $('#resultImage').attr('src', '').attr('alt', '無圖片');
+                });
+            }
+
+            // 🟢 1. 安全渲染表格函數 (弱掃相容、防止 XSS)
+            function renderTable(dataList) {
+                // 抓取目前 URL 的 nid 參數
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentNid = parseInt(urlParams.get('nid'), 10);
+                const safeNid = isNaN(currentNid) ? '' : currentNid;
+                const category = $("#categorySelect").val();
+                $tbody.empty(); // 先清空舊資料或提示文字
+
+                if (!dataList || dataList.length === 0) {
+                    $tbody.append('<tr><td colspan="4" class="text-center">查無符合條件的稅號資料</td></tr>');
+                    return;
+                }
+
+                // 循環跑資料，建立安全的 DOM 節點
+                $.each(dataList, function(index, item) {
+                    // 建立標準結構骨架
+                    const $tr = $(`
+                        <tr>
+                            <td class="text-left category-cell"></td>
+                            <td class="text-left code-cell"></td>
+                            <td class="text-left name-cell"></td>
+                            <td class="text-right rate-cell"></td>
+                        </tr>
+                    `);
+                    // 使用安全無虞的 jQuery API 注入文字與屬性 (弱掃必過)
+                    $tr.find('.category-cell').text(item.categoryText); // 填入 "台灣=>大陸" 或 "大陸=>台灣"
+                    $tr.find('.code-cell').text(item.code);             // 填入 "3919.10.99"
+                    $tr.find('.name-cell').text(item.name);             // 填入 "其他材料製的,寬度≤20釐米..."
+                    $tr.find('.rate-cell').text(item.taxRate);          // 填入 "6.5"
+
+                    // 塞入網頁
+                    $tbody.append($tr);
+                });
+                if (category==2)
+                    $('#resultImage').attr('src', '/images/2_2012.jpg').attr('alt', '大陸方面降稅安排表格圖');
+                else if (category == 1)
+                    $('#resultImage').attr('src', '/images/1_2012.jpg').attr('alt', '台灣方面降稅安排表格圖');
+                else
+                    $('#resultImage').attr('src', '').attr('alt', '無圖片');
+            }
+
+            // ⚡ 2. 發送 AJAX 查詢
+            $submitBtn.on("click", function() {
+                const codeVal = $("#codeQuery").val().trim();
+                const $codeError = $("#codeError");
+
+                // 簡易前端防呆
+                if (codeVal.length > 0 && (codeVal.length < 2 || codeVal.length > 8)) {
+                    $codeError.show();
+                    $("#codeQuery").attr("aria-invalid", "true").focus();
+                    return;
+                }
+                $codeError.hide();
+                $("#codeQuery").attr("aria-invalid", "false");
+
+                // 撈取表單數值
+                const category = $("#categorySelect").val();
+                const name = $("#nameQuery").val().trim();
+
+                $tbody.html('<tr><td colspan="4" class="text-center">資料查詢中，請稍候...</td></tr>');
+
+                // 呼叫後端 JSON API
+                $.ajax({
+                    url: '/CodeList/SearchDataJson',
+                    type: 'GET',
+                    data: { category: category, code: codeVal, name: name },
+                    dataType: 'json',
+                    success: function(data) {
+                        renderTable(data); // 💡 將撈出來的 JSON 陣列交給安全渲染器
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error: ", error);
+                        $tbody.html('<tr><td colspan="4" class="text-center" style="color:red;">查詢失敗，請稍後再試。</td></tr>');
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="~/js/main.js"></script>
+}

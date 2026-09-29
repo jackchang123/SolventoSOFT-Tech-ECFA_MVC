@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDetail.cshtml";
+    ViewData["Title"] = Model.Title;
+}
+@model ECFA_MVC.ViewModels.PageDetailViewModel
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@Model.Title</h2>
+</div>
+
+<div class="content">
+    @Html.Raw(Model.Content)
+</div>
+@if (Model.Attachments != null && Model.Attachments.Any())
+{
+    <div class="document-box">
+        <span class="txt">文件下載：</span>
+        <ul class="document-list list-style-disc">
+            @foreach (var file in Model.Attachments)
+            {
+                // 1. 取得乾淨的副檔名（例如：pdf, docx），供 title 標籤與圖示識別使用
+                string ext = !string.IsNullOrEmpty(file.FileName)
+                    ? System.IO.Path.GetExtension(file.FileName).TrimStart('.').ToLower()
+                    : "file";
+
+                // 2. 自動判斷檔案大小（Byte 轉 KB/MB），讓民眾更清楚下載成本
+                string readableSize = "0 KB";
+                if (long.TryParse(file.DisplaySize, out long byteSize) && byteSize > 0)
+                {
+                    readableSize = byteSize >= 1048576
+                        ? $"{((double)byteSize / 1048576):F2} MB"
+                        : $"{((double)byteSize / 1024):F1} KB";
+                }
+                else if (!string.IsNullOrEmpty(file.DisplaySize))
+                {
+                    readableSize = file.DisplaySize;
+                }
+
+                // 3. 組合出無障礙 A11y 與弱掃必過的超連結
+                <li>
+                    <a asp-action="DownloadAttachment"
+                    asp-controller="Page"
+                    asp-route-id="@file.Id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="@(file.Title).@(ext)（@(ext)檔案下載，大小：@(readableSize)）（另開新視窗）">
+                        @file.Title
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@section Styles {
+    <script src="~/js/main.js"></script>
+}

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "首頁";
+}
+<div class="wrap">
+    <a href="#key_C" id="key_C" accesskey="C" title="Alt+C 主要內容區" class="visually-hidden">:::</a>
+</div>
+
+<!-- 輪播、頁面連結 -->
+<section class="section banner-section">
+    <div class="wrap">
+        <!-- 圖片輪播 -->
+        @await Component.InvokeAsync("Carousel")
+
+        <!-- 頁面連結 -->
+        @await Component.InvokeAsync("Carousel", new { category = "Outlink" })
+    </div>
+</section>
+
+<!-- 最新消息 -->
+@await Component.InvokeAsync("NewsList", new { count = 5 })
+
+<!-- 相關網站 -->
+@await Component.InvokeAsync("Carousel", new { category = "Link" })
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+    <script src="~/js/index.js"></script>
+}
+

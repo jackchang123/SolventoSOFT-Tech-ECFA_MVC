@@ -1,0 +1,107 @@
+﻿@model ECFA_MVC.ViewComponents.SocialMediaViewModel
+@using System.Net
+
+<div class="social-media-list">
+    <ul>
+        @if (Model.ShowRss)
+        {
+            <li>
+                <a href="#" class="rss" data-action="rss"
+                   data-url="@WebUtility.UrlEncode(Model.CurrentUrl)"
+                   data-title="@WebUtility.UrlEncode(Model.PageTitle)"
+                   title="開啟 RSS（另開新視窗）" aria-label="開啟 RSS（另開新視窗）">
+                    <img src="~/images/icon_Rss.svg" alt="RSS圖示" class="icon">
+                </a>
+            </li>
+        }
+
+        @if (Model.ShowPlurk)
+        {
+            <li>
+                <a href="#" class="plurk" data-action="plurk"
+                data-url="@WebUtility.UrlEncode(Model.CurrentUrl)"
+                data-title="@WebUtility.UrlEncode(Model.PageTitle)"
+                title="分享到 噗浪（另開新視窗）" aria-label="分享到 噗浪（另開新視窗）">
+                    <!-- ⚠️ 記得放上你的噗浪 icon 圖片 -->
+                    <img src="~/images/icon_Plurk.svg" alt="噗浪圖示" class="icon">
+                </a>
+            </li>
+        }
+
+        @if (Model.ShowFb)
+        {
+            <li>
+                <a href="#" class="facebook" data-action="facebook"
+                   data-url="@WebUtility.UrlEncode(Model.CurrentUrl)"
+                   data-title="@WebUtility.UrlEncode(Model.PageTitle)"
+                   title="分享到 Facebook（另開新視窗）" aria-label="分享到 Facebook（另開新視窗）">
+                    <img src="~/images/icon_FB.svg" alt="Facebook圖示" class="icon">
+                </a>
+            </li>
+        }
+
+        @if (Model.ShowX)
+        {
+            <li>
+                <a href="#" class="x" data-action="x"
+                   data-url="@WebUtility.UrlEncode(Model.CurrentUrl)"
+                   data-title="@WebUtility.UrlEncode(Model.PageTitle)"
+                   title="分享到 X（另開新視窗）" aria-label="分享到 X（另開新視窗）">
+                    <img src="~/images/icon_twitter.svg" alt="X圖示" class="icon">
+                </a>
+            </li>
+        }
+
+        @if (Model.ShowPrint)
+        {
+            <li>
+                <a href="#" class="print" data-action="print"
+                   title="列印" aria-label="列印">
+                    <img src="~/images/icon_Print.svg" alt="列印圖示" class="icon">
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+@* 追加在最底部的 JS 區塊 *@
+@section Scripts {
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const socialList = document.querySelector(".social-media-list");
+            if (socialList) {
+                socialList.addEventListener("click", function (event) {
+                    const targetLink = event.target.closest("a");
+                    if (!targetLink) return;
+
+                    const action = targetLink.getAttribute("data-action");
+                    if (!action) return;
+
+                    event.preventDefault();
+
+                    const url = targetLink.getAttribute("data-url");
+                    const title = targetLink.getAttribute("data-title");
+
+                    switch (action) {
+                        case "rss":
+                            window.open(`/Feed/News`, "_blank");
+                            break;
+                        case "plurk":
+                            const plurkContent = `${url}%20(${title})`;
+                            window.open(`https://plurk.com{plurkContent}`, "_blank", "width=800,height=600,scrollbars=yes");
+                            break;
+                        case "facebook":
+                            window.open(`http://www.facebook.com/sharer.php?u={url}&t=${title}`, "_blank", "width=600,height=400,scrollbars=yes");
+                            break;
+                        case "x":
+                            window.open(`https://twitter.com{url}&text=${title}`, "_blank", "width=600,height=400,scrollbars=yes");
+                            break;
+                        case "print":
+                            window.print();
+                            break;
+                    }
+                });
+            }
+        });
+    </script>
+}

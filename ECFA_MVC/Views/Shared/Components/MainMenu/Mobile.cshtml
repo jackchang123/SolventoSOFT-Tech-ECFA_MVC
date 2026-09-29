@@ -1,0 +1,75 @@
+﻿@model List<ECFA_MVC.ViewModels.MenuViewModel>
+
+<ul class="mobile-menu-list">
+    @foreach (var item in Model)
+    {
+        var hasSubMenu = item.SubMenus != null && item.SubMenus.Any();
+        <li class="menu-item level-1 @(hasSubMenu ? "has-submenu" : null)">
+            @if (hasSubMenu)
+            {
+                <button type="button" class="menu-button" title="@item.Title" aria-haspopup="true" aria-expanded="false">
+                    <span class="txt">@item.Title</span>
+                    <span class="arrow" aria-hidden="true"></span>
+                </button>
+                <ul class="menu-submenu" aria-hidden="true">
+                    @foreach (var subItem in item.SubMenus!)
+                    {
+                        var l2HasSub = subItem.SubMenus != null && subItem.SubMenus.Any();
+                        <li class="menu-item level-2 @(l2HasSub ? "has-submenu" : null)">
+                            @if (l2HasSub)
+                            {
+                                <button type="button" class="menu-button" title="@subItem.Title" aria-haspopup="true" aria-expanded="false">
+                                    <span class="txt">@subItem.Title</span>
+                                    <span class="arrow" aria-hidden="true"></span>
+                                </button>
+                            }
+                            else
+                            {
+                                <a href="@subItem.Url" target="@subItem.Target" class="menu-link" title="@subItem.Title">@subItem.Title</a>
+                            }
+                            @if (l2HasSub)
+                            {
+                                <ul class="menu-submenu" aria-hidden="true">
+                                    @foreach (var l3 in subItem.SubMenus!)
+                                    {
+                                        var l3HasSub = l3.SubMenus != null && l3.SubMenus.Any();
+                                        <li class="menu-item level-3 @(l3HasSub ? "has-submenu" : null)">
+                                        @if (l3HasSub)
+                                        {
+                                            <button type="button" class="menu-button" title="@subItem.Title" aria-haspopup="true" aria-expanded="false">
+                                                <span class="txt">@l3.Title</span>
+                                                <span class="arrow" aria-hidden="true"></span>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <a href="@l3.Url" target="@l3.Target" class="menu-link" title="@l3.Title">@l3.Title</a>
+                                        }
+                                        @if (l3HasSub)
+                                        {
+                                                <ul class="menu-submenu" aria-hidden="true">
+                                                @foreach (var l4 in l3.SubMenus!)
+                                                {
+                                                    <li class="menu-item level-4">
+                                                            <a href="@l4.Url" target="@l4.Target" class="menu-link" title="@l4.Title">@l4.Title</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <a href="@item.Url" target="@item.Target" class="menu-link" title="@item.Title">
+                    <span class="txt">@item.Title</span>
+                </a>
+            }
+        </li>
+    }
+</ul>

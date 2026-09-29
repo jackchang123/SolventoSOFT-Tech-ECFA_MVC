@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "聯絡我們";
+}
+<!-- 主要內容區 -->
+<main>
+    <div class="wrap">
+        <a href="#key_C" id="key_C" accesskey="C" title="Alt+C 主要內容區" class="visually-hidden">:::</a>
+
+        <div class="main-wrap">
+            <!-- 主要內容 -->
+            <div class="main-content">
+                <div class="content-header">
+                    <!-- 麵包屑 -->
+                    <div class="breadcrumb">
+                        <img src="~/images/icon_breadcrumb.svg" alt="" class="icon">
+                        <ul>
+                            <li>網頁導覽</li>
+                        </ul>
+                    </div>
+
+                    <!-- 社群列表 -->
+                    @await Component.InvokeAsync("SocialMediaList")
+                </div>
+                <!-- 標題列 -->
+                <div class="title-row">
+                    <h2>網頁導覽</h2>
+                </div>
+                <div class="shortcut-key">
+                    <p>本網站依照「無障礙網頁開發規範」原則設計，遵循無障礙網站設計之規範提供網頁導盲磚(:::)、網站導覽、鍵盤快速鍵 (Accesskey)等設計方式。</p>
+                    <p>本網站的快速鍵(Accesskey)設定如下：</p>
+                    <ol class="list-style-disc">
+                        <li>Alt+U：上方主導覽選單區塊。</li>
+                        <li>Alt+L：內容頁左方選單。</li>
+                        <li>Alt+C：中央內容區塊。</li>
+                        <li>Alt+S：網站搜尋。</li>
+                    </ol>
+                    <p style="margin-top: 1rem;">
+                        ※ 若您使用的瀏覽器是IE，快速鍵的使用方式是Alt+(所定義的字母)；若您用Firefox
+                        瀏覽網頁，快速鍵的使用方式是 Shift+Alt+(所定義的字母)，例如 Shift+Alt+C會跳至網頁中央區塊，以此類推。
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        ※ 當本網站項目無法以滑鼠點選時，您可利用以下鍵盤操作方式瀏覽資料<br>
+                        Tab：可利用Tab鍵跳至下一筆項目。<br>
+                        Tab + Shift：按Tab + Shift可往回跳至上一筆項目。
+                    </p>
+                </div>
+                @await Component.InvokeAsync("MainMenu", new { viewName = "sitemap" })
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+    <link rel="stylesheet" href="~/css/style.css">
+}

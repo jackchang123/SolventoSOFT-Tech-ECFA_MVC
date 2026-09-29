@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDetail.cshtml";
+    ViewData["Title"] = Model.Title;
+}
+@model ECFA_MVC.ViewModels.PageDetailViewModel
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@Model.Title</h2>
+</div>
+
+<div class="content flex-row column gap-16">
+    @Html.Raw(Model.Content)
+</div>
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+}

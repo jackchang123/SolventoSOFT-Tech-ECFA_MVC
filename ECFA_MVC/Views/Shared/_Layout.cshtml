@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 讓每個頁面可以動態決定自己的標題 -->
+    <title>@ViewData["Title"] - ECFA兩岸經濟合作架構協議</title>
+  
+    <!-- Facebook 專用的 Open Graph 標籤 -->
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:type" content="website" />
+
+    <!-- 1. 注意路徑開頭加上 ~/ 確保在任何子網頁都能正確讀取 -->
+    <link rel="shortcut icon" href="~/images/favicon.ico" type="image/x-icon">
+
+    <script src="~/vendors/jquery-3.7.1.min.js"></script>
+
+    <!-- superfish plugin -->
+    <script src="~/vendors/superfish-master/hoverIntent.js"></script>
+    <script src="~/vendors/superfish-master/superfish.min.js"></script>
+    <script src="~/vendors/superfish-master/supersubs.js"></script>
+
+    <!-- slick plugin -->
+    <script src="~/vendors/slick-1.8.1/slick.min.js"></script>
+    <link rel="stylesheet" href="~/vendors/slick-1.8.1/slick.css">
+
+    <script src="~/js/site-search.js" asp-append-version="true"></script>
+
+    <!-- 自訂樣式請置於最後，以免樣式被覆蓋 -->
+    <link rel="stylesheet" href="~/css/component.css">
+    <link rel="stylesheet" href="~/css/index.css">
+    
+    <!-- 預留位置：讓特定子網頁注入專屬的 CSS -->
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="full-wrap">
+        <a href="#key_C" class="goMainContent" title="跳到主要內容區塊" tabindex="1">跳到主要內容區塊</a>
+
+        <h1 class="sr-only">ECFA兩岸經濟合作架構協議</h1>
+
+        <partial name="_Header" />
+    
+        @RenderBody()
+
+        @await Component.InvokeAsync("Footer")
+    </div>
+</body>
+</html>

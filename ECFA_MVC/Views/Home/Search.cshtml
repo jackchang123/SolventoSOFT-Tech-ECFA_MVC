@@ -1,0 +1,271 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "搜尋功能";
+}
+<!-- 主要內容區 -->
+<main>
+    <div class="wrap">
+        <a href="#key_C" id="key_C" accesskey="C" title="Alt+C 主要內容區" class="visually-hidden">:::</a>
+
+        <div class="main-wrap">
+
+            <!-- 主要內容 -->
+            <div class="main-content">
+                <div class="content-header">
+                    <!-- 麵包屑 -->
+                    <div class="breadcrumb">
+                        <img src="./images/icon_breadcrumb.svg" alt="" class="icon">
+                        <ul>
+                            <li>首頁</li>
+                            <li>全文檢索</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 標題列 -->
+                <div class="title-row">
+                    <h2>全文檢索</h2>
+                </div>
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="start" name="start" value="1" />
+                <input type="hidden" id="rangeContent" name="rangeContent" value="0" />
+                <input type="hidden" id="datea" name="rangeContent" />
+                <input type="hidden" id="dateb" name="rangeContent" />
+                <input type="hidden" id="old_datea" name="rangeContent" />
+                <input type="hidden" id="old_dateb" name="rangeContent" />
+                <input type="hidden" id="OldCategory" name="OldCategory" />
+                <div class="search-container">
+                    <div class="search-block">
+                        <div class="flex-row gap-16 column">
+                            <div class="search-input">
+                                <div class="form-group column">
+                                    <div class="label">
+                                        <label class="control-label">關鍵字</label>
+                                    </div>
+                                    <div class="field">
+                                        <input type="text" placeholder="請輸入關鍵字..." class="form-control keyword-input" id="keyword" autocomplete="off">
+                                        <span class="error-prompt">輸入錯誤！</span>
+                                    </div>
+                                </div>
+                                <div class="search-actions flex-row gap-16">
+                                    <button type="button" class="button button-border-default" id="btnSearch" data-search-url="@Url.Action("GetSearchResult", "Search")">
+                                        搜尋
+                                        <img src="./images/icon_search_black.svg" alt="" class="icon">
+                                    </button>
+                                    <button type="button" class="button button-border-blue btn-clear" id="btnClear">
+                                        清除
+                                    </button>
+                                </div>
+                                <button type="button"
+                                        class="button button-border-default advanced-search-toggle"
+                                        aria-expanded="false" aria-controls="advancedSearchPanel">
+                                    進階搜尋
+                                    <img src="./images/icon_menu_arrow_down_black.svg" alt="" class="icon">
+                                </button>
+                            </div>
+
+                            <div id="search-error-message"
+                                 role="alert"
+                                 aria-live="assertive"
+                                 aria-atomic="true"
+                                 style="display: none; color: #721c24; background-color: #f8d7da; padding: 10px; margin: 15px 0;">
+                            </div>
+
+                            <div id="advancedSearchPanel" class="advanced-search" hidden aria-hidden="true">
+                                <div class="options-row">
+                                    <fieldset class="form-group">
+                                        <legend class="control-label">查詢模式</legend>
+                                        <div class="field">
+                                            <div class="flex-row flex-wrap gap-24">
+                                                <label class="form-radio">
+                                                    <input type="radio" name="searchmode" value="0" checked>
+                                                    <span>精確</span>
+                                                </label>
+                                                <label class="form-radio">
+                                                    <input type="radio" name="searchmode" value="1">
+                                                    <span>模糊</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="form-group">
+                                        <legend class="control-label">功能選項</legend>
+                                        <div class="field">
+                                            <div class="flex-row flex-wrap gap-16">
+                                                <label class="form-checkbox">
+                                                    <input type="checkbox" name="s1" checked="">
+                                                    <span>中文同音</span>
+                                                </label>
+                                                <label class="form-checkbox">
+                                                    <input type="checkbox" name="s2">
+                                                    <span>中英同義</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-group column">
+                                        <div class="label">
+                                            <label class="control-label">每筆頁數</label>
+                                        </div>
+                                        <div class="field">
+                                            <select id="perPageData" class="form-control">
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="50">50</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="date-range-group">
+                                    <div class="form-group column">
+                                        <div class="label">
+                                            <label class="control-label">開始日期</label>
+                                        </div>
+                                        <div class="field">
+                                            <input type="text" class="form-control date start-date" id="calendarFrom"
+                                                   placeholder="請選擇開始日期">
+                                            <span class="error-prompt">錯誤文字</span>
+                                        </div>
+                                    </div>
+                                    <div class="function">至</div>
+                                    <div class="form-group column">
+                                        <div class="label">
+                                            <label class="control-label">結束日期</label>
+                                        </div>
+                                        <div class="field">
+                                            <input type="text" class="form-control date end-date" id="calendarTo"
+                                                   placeholder="請選擇結束日期">
+                                            <span class="error-prompt">錯誤文字</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="search-prompt flex-row">
+                                <div class="prompt-label">智慧關聯提示詞：</div>
+                                <div class="prompt-content">
+                                    <ul class="flex-row gap-8 flex-wrap" id="hotQueryContent">
+                                        <li><a>查無智慧關聯提示詞</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <aside class="search-aside" aria-label="全文檢索輔助區">
+                        <div class="search-aside-container">
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <div class="accordion-header">
+                                        <span>熱門關鍵字</span>
+                                        <button type="button" class="accordion-button active"
+                                                aria-expanded="true" aria-label="熱門關鍵字"></button>
+                                    </div>
+                                    <div class="accordion-collapse" aria-hidden="false">
+                                        <div class="accordion-body">
+                                            <ul class="hot-keyword" id="hotKeywords">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <div class="accordion-header">
+                                        <span>時間序列</span>
+                                        <button type="button" class="accordion-button active"
+                                                aria-expanded="true" aria-label="時間序列"></button>
+                                    </div>
+                                    <div class="accordion-collapse" aria-hidden="false">
+                                        <div class="accordion-body">
+                                            <div class="timeline-box">
+                                                <div class="timeline-radio-group">
+                                                    <fieldset class="form-group">
+                                                        <legend class="control-label sr-only">
+                                                            選擇時間序列
+                                                        </legend>
+                                                        <div class="field">
+                                                            <div class="flex-row flex-wrap gap-24">
+                                                                <label class="form-radio">
+                                                                    <input type="radio" name="statDate"
+                                                                           value="-365" checked="">
+                                                                    <span>年</span>
+                                                                </label>
+                                                                <label class="form-radio">
+                                                                    <input type="radio" name="statDate"
+                                                                           value="-30">
+                                                                    <span>月</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="timeline-data">
+                                                    <div id="timelineChart" style="width: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                    <div class="search-result">
+                        <div class="search-result-prompt">
+                            <p class="resultStatsBox_text">共有<span class="text-red">0筆</span>搜尋結果</p>
+                            <div class="select-row">
+                                <span>依照</span>
+                                <div class="form-group">
+                                    <div class="label">
+                                        <label class="control-label sr-only">資料排列順序</label>
+                                    </div>
+                                    <div class="field">
+                                        <select class="form-control singleSelect" onchange="doSearch();" id="selectSort">
+                                            <option value="$HitRate$" selected>熱門瀏覽</option>
+                                            <option value="$Date$">最新刊登</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <span>排序</span>
+                            </div>
+                        </div>
+                        <div class="search-result-list">
+                            <ul id="SearchResult">
+                            </ul>
+                        </div>
+
+                        <div class="pagination-wrapper" role="navigation" aria-label="頁碼分頁" data-total="0">
+                            <ul id="pagination-container" class="pagination"></ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Styles {
+    <style>
+        #pagination-container, #pager {
+            display: none !important; /* 加上 !important 確保不會被 main.js 或其他外掛的樣式覆蓋 */
+        }
+    </style>
+    <script src="/js/main.js"></script>
+    <script src="/js/configSearchList.js"></script>
+    <!-- Pagination plugin -->
+    <script src="/vendors/Convenient-Pagination/pagination.js"></script>
+    <link rel="stylesheet" href="/vendors/Convenient-Pagination/pagination.css">
+
+    <!-- Flatpickr plugin -->
+    <script src="/vendors/flatpickr-4.6.13/flatpickr.min.js"></script>
+    <link rel="stylesheet" href="/vendors/flatpickr-4.6.13/flatpickr.min.css">
+    <script src="/vendors/flatpickr-4.6.13/zh-tw.js"></script>
+
+    <!-- Highcharts plugin -->
+    <script src="/vendors/Highcharts-12.5.0/highcharts.js"></script>
+
+    <!-- 自訂樣式請置於最後，以免樣式被覆蓋 -->
+    <link rel="stylesheet" href="/css/component.css">
+    <link rel="stylesheet" href="/css/style.css">
+}

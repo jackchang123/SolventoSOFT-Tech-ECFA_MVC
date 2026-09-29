@@ -1,0 +1,163 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewData["Title"] = ViewBag.TitleName;
+}
+
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@ViewBag.TitleName</h2>
+</div>
+
+<div class="search-box">
+    <div class="select-row">
+        <div class="form-group">
+            <div class="label">
+                <label class="control-label">分類：</label>
+            </div>
+            <div class="field">
+                <select class="form-control" name="categoryId" id="categorySelect">
+                    <option value="-1" selected>全部類別</option>
+                    @if (ViewData["Categories"] is List<SelectListItem> categories)
+                    {
+                        foreach (var item in categories)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="download-file">
+            <a href="/api/download/file?path=9908_FAQ.doc" title="ECFA常見問答下載.doc（doc檔案下載）" download>ECFA常見問答下載.doc</a>
+        </div>
+    </div>
+</div>
+
+<!-- 資料列表表格 -->
+<div class="table-container">
+    <table class="list-table">
+        <caption class="sr-only">認識ECFA歷史文件區下常見問答相關列表</caption>
+        <thead>
+            <tr>
+                <th scope="col">標題</th>
+                <th scope="col" class="col-fixed">單位</th>
+            </tr>
+        </thead>
+
+        <tbody id="data-table-body">
+            <!-- 資料會由 AJAX 動態渲染至此 -->
+        </tbody>
+    </table>
+</div>
+<!-- 分頁容器（必須保留原 ID，供 main.js 偵測） -->
+<div class="pagination-wrapper" role="navigation" aria-label="頁碼分頁">
+    <ul id="pagination-container" class="pagination"></ul>
+</div>
+
+@section Styles {
+    <script>
+        $(document).ready(function () {
+            let currentPage = sessionStorage.getItem("faq_current_page") 
+                              ? parseInt(sessionStorage.getItem("faq_current_page")) 
+                              : 1;
+            let categorySelect = sessionStorage.getItem("faq_categorySelect") 
+                              ? parseInt(sessionStorage.getItem("faq_categorySelect")) 
+                              : -1;
+            $('#categorySelect').val(categorySelect);
+
+            $('#categorySelect').on('change', function() {
+                // 當切換分類時，必須視為「第一次載入」，重新撈取第 1 頁並重建分頁
+                loadPageData(1, true);
+            });
+            // 網頁一載入，自動讀取第 1 頁
+            loadPageData(currentPage, true);
+        });
+
+        // 負責發送 Ajax 撈資料的統一函式
+        function loadPageData(pageNumber, isFirstLoad) {
+            var selectedCategory = $('#categorySelect').val();
+
+            $.ajax({
+                url: '@Url.Action("GetFAQList", "FAQ")',
+                data: { categoryId: selectedCategory, pageNumber: pageNumber, pageSize: 10 },
+                type: 'GET',
+                success: function (response) {
+                    // 1. 渲染您的 Table 資料畫面
+                    renderTable(response.items);
+
+                    // 2. 如果是第一次載入，拿到真正的 totalCount 後，再去初始化分頁套件
+                    if (isFirstLoad) {
+                        initPaginationWithRealCount(response.totalCount);
+                    }
+                }
+            });
+        }
+
+        // 動態傳入實體總筆數，並初始化分頁
+        function initPaginationWithRealCount(realTotalCount) {
+            const $container = $("#pagination-container");
+            const itemsOnPage = 10;
+            const maxPageVisibleItems = $(window).width() >= 992 ? 10 : 6;
+
+            // 清空舊的分頁 UI（避免重複初始化產生衝突）
+            $container.empty();
+
+            // 實例化套件
+            const pagination = new Pagination({
+                container: $container,
+                maxVisibleElements: maxPageVisibleItems,
+                showInput: false,
+                enhancedMode: false,
+                pageClickCallback: function (pageNumber) {
+                    // 點擊非第一頁的頁碼時，只撈資料，不需要重複初始化分頁
+                    loadPageData(pageNumber, false);
+                    sessionStorage.setItem("faq_current_page", pageNumber); 
+                    // 執行您原本在 Main.js 裡的 UI 優化邏輯...
+                    if (typeof updateAriaCurrent === 'function') {
+                        updateAriaCurrent(pageNumber);
+                    }
+                }
+            });
+
+            // 完美注入後端傳來的實體總筆數！
+            pagination.make(realTotalCount, itemsOnPage);
+        }
+
+        // 渲染 Table 的實作（請依您的欄位名稱調整）
+        function renderTable(dataList) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentNid = parseInt(urlParams.get('nid'), 10);
+            const safeNid = isNaN(currentNid) ? '' : currentNid;
+
+            const $tbody = $("#data-table-body");
+            $tbody.empty(); // 先清空舊資料
+
+            $.each(dataList, function(index, item) {
+                // 1. 建立結構骨架，變數留空
+                const $tr = $(`
+                    <tr>
+                        <th scope="row" class="text-left">
+                            <a href="" class="link" title="">
+                                <span class="ellipsis"></span>
+                            </a>
+                        </th>
+                        <td class="text-left text-darkblue"></td>
+                    </tr>
+                `);
+
+                // 2. 組合網址字串（搭配 encodeURIComponent 確保參數安全）
+                const targetUrl = `/FAQ/ShowFAQ?id=${encodeURIComponent(item.ntId)}&nid=${encodeURIComponent(safeNid)}`;
+
+                // 3. 使用安全無虞的 API 注入屬性與文字（弱掃必過）
+                $tr.find('a').attr('href', targetUrl);     // 安全注入 href 屬性
+                $tr.find('a').attr('title', item.ntTitle); // 安全注入 title 屬性
+                $tr.find('.ellipsis').text(item.ntTitle);  // 安全注入文字
+                $tr.find('td').text(item.ntAuthor);        // 安全注入文字
+
+                // 3. 將安全的元素塞入 tbody
+                $tbody.append($tr);
+            });
+        }
+    </script>
+    <script src="~/js/main.js"></script>
+}

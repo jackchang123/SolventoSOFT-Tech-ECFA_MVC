@@ -1,0 +1,35 @@
+﻿@model List<Link>
+
+@if (Model != null && Model.Any())
+{
+    <div class="banner-main" aria-roledescription="carousel" aria-label="圖片輪播">
+        <div class="banner-control">
+            <button type="button" class="banner-playpause" aria-label="暫停自動輪播" aria-pressed="false"></button>
+            <div class="banner-pagination" aria-live="off">
+                <span class="sr-only">目前頁面：</span>
+                <span class="current">1</span>
+                <span class="separate" aria-hidden="true">/</span>
+                <span class="sr-only">，總頁數：</span>
+                <span class="total">@Model.Count</span>
+            </div>
+        </div>
+        <div class="banner-items">
+            @foreach (var item in Model)
+            {
+                // 1. 在 C# 先判斷是否需要另開新視窗（不分大小寫，並去除空白）
+                bool isBlank = string.Equals(item.Target?.Trim(), "_blank", StringComparison.OrdinalIgnoreCase);
+
+                // 2. 根據 isBlank 動態決定 title 屬性要不要加上括號字樣
+                string titleText = isBlank ? $"{item.NtTitle}（另開新視窗）" : item.NtTitle;
+
+                // 3. 根據 isBlank 動態決定 target 屬性要顯示 _blank 還是不顯示
+                string targetAttr = isBlank ? "_blank" : null;
+                <div class="banner-item">
+                    <a href="@item.Url" class="banner-img" title="@titleText" target="@targetAttr">
+                        <img src="@Url.Content(item.ImgPath)" alt="@item.NtTitle" asp-append-version="true">
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}

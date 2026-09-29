@@ -1,0 +1,27 @@
+﻿@model List<Link>
+
+@if (Model != null && Model.Any())
+{
+    <!-- 頁面連結 -->
+    <div class="outlink">
+        <ul>
+            @foreach (var item in Model)
+            {
+                // 1. 在 C# 先判斷是否需要另開新視窗（不分大小寫，並去除空白）
+                bool isBlank = string.Equals(item.Target?.Trim(), "_blank", StringComparison.OrdinalIgnoreCase);
+
+                // 2. 根據 isBlank 動態決定 title 屬性要不要加上括號字樣
+                string titleText = isBlank ? $"{item.NtTitle}（另開新視窗）" : item.NtTitle;
+
+                // 3. 根據 isBlank 動態決定 target 屬性要顯示 _blank 還是不顯示
+                string targetAttr = isBlank ? "_blank" : null;
+                <li>
+                    <a href="@item.Url" title="@titleText" target="@targetAttr">
+                        @Html.Raw(item.NtTitle)
+                        <img src="@Url.Content(item.ImgPath)" alt="">
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+}

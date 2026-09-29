@@ -1,0 +1,382 @@
+@charset "UTF-8";
+:root {
+  --fontFamily: NotoSans, "PingFangTC", Microsoft JhengHei, "微軟正黑體", "Helvetica", "sans-serif";
+  /*語意化顏色變數*/
+  --color-gray-100: #f4f4f4;
+  --color-gray-200: #efefef;
+  --color-gray-300: #e1e1e1;
+  --color-gray-400: #cbcbcb;
+  --color-gray-500: #535353;
+  --color-gray-600: #424242;
+  --color-black: #000000;
+  --color-blue-100: #ceebf7;
+  --color-blue-200: #bfddeb;
+  --color-blue-300: #b7d6e3;
+  --color-primary: #e1e1e1;
+  --color-primary-hover: #cbcbcb;
+  --color-primary-linear: linear-gradient(to bottom, #efefef 0%, #e1e1e1 53%, #efefef 100%);
+  --color-primary-light: #f4f4f4;
+  --color-secondary: #bbdef6;
+  --color-secondary-hover: #93c4ed;
+  --color-secondary-dark: #225a99;
+  --color-secondary-darker: #094168;
+  --color-tertiary: #42c2a5;
+  --color-tertiary-light: #bbeae1;
+  --color-tertiary-Linear: linear-gradient(to bottom, #f2fbfa, #fff);
+  --color-success: #42c248;
+  --color-success-hover: #06ad0f;
+  --color-info: #0062bf;
+  --color-warning: #ffc82f;
+  --color-warning-hover: #efbb00;
+  --color-warning-light: #ffe7a4;
+  --color-danger: #e72c1b;
+  --color-text-dark: #094168;
+  --color-text-default: var(--color-black);
+  --color-text-light: var(--color-gray-600);
+  --color-bg-default: #efefef;
+  --color-bg-lightblue: #ceebf7;
+  --color-bg-blue: #b7d6e3;
+  --color-border-default: var(--color-gray-400);
+  --color-border-light: var(--color-gray-300);
+  --outlineBrown: #AE8800;
+}
+
+html {
+  overflow: inherit !important;
+}
+
+body {
+  overflow: hidden;
+}
+
+.full-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+}
+.full-container .main-container {
+  width: calc(100% - 200px);
+  height: 100vh;
+  padding: 1rem;
+  background-color: #fcfcfc;
+  box-sizing: border-box;
+  overflow: auto;
+  /* width */
+}
+.full-container .main-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.full-container .main-container {
+  /* Handle */
+}
+.full-container .main-container::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: rgba(79, 79, 79, 0.5);
+}
+.full-container .main-container {
+  /* Track */
+}
+.full-container .main-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.full-container .main-container::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+.full-container .main-container {
+  /*某些元素的corner部分的部分样式(例:textarea的可拖动按钮)*/
+}
+.full-container .main-container::-webkit-resizer {
+  background-color: transparent;
+  border-color: transparent;
+}
+.full-container .main-container {
+  /*firefox scrollbar*/
+  scrollbar-width: thin;
+  scrollbar-color: rgba(79, 79, 79, 0.5) #fff;
+  position: relative;
+}
+
+aside {
+  width: 200px;
+  height: 100vh;
+  background-color: #fffaf2;
+  box-sizing: border-box;
+  overflow-y: auto;
+  flex-shrink: 0;
+  /* width */
+}
+aside::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+aside {
+  /* Handle */
+}
+aside::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: rgba(79, 79, 79, 0.5);
+}
+aside {
+  /* Track */
+}
+aside::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+aside::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+aside {
+  /*某些元素的corner部分的部分样式(例:textarea的可拖动按钮)*/
+}
+aside::-webkit-resizer {
+  background-color: transparent;
+  border-color: transparent;
+}
+aside {
+  /*firefox scrollbar*/
+  scrollbar-width: thin;
+  scrollbar-color: rgba(79, 79, 79, 0.5) #fff;
+}
+aside .title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 0.75em 1em;
+}
+aside ul li a {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  color: #6c6c6c;
+  padding: 0.75em 1em;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+aside ul li a:hover {
+  background-color: #4f4f4f;
+  color: #fff;
+}
+
+section {
+  margin-bottom: 80px;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 0.8333em;
+  position: relative;
+  z-index: 1;
+}
+.section-title > span:first-child {
+  color: #4f4f4f;
+  border-right: 3px solid #4f4f4f;
+  padding-right: 10px;
+  background-color: #fcfcfc;
+}
+.section-title > span:nth-child(2) {
+  color: #000;
+  padding-left: 10px;
+  padding-right: 20px;
+  background-color: #fcfcfc;
+}
+.section-title::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: #3153ba;
+  opacity: 0.3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+.modals .row {
+  margin-bottom: 0;
+}
+
+.flex-row {
+  margin-bottom: 1.5rem;
+}
+
+.caption {
+  font-size: 1.125rem;
+  margin-bottom: 0.8888em;
+}
+.caption ul {
+  padding-left: 24px;
+}
+.caption ul li {
+  position: relative;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.caption ul li::before {
+  display: block;
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #3C4C5E;
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.caption.description {
+  font-size: 1rem;
+  background-color: rgba(180, 191, 201, 0.5);
+  border-radius: 4px;
+  padding: 10px;
+}
+.caption.description ul {
+  padding-left: 18px;
+}
+.caption.description ul li::before {
+  display: block;
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #3C4C5E;
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.margin-center {
+  margin: auto;
+}
+
+.subtitle {
+  font-size: 1rem;
+  background-color: rgba(180, 191, 201, 0.5);
+  color: #151515;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 1em;
+  margin-bottom: 1.25em;
+  text-align: left;
+}
+
+.layout-img-1 {
+  width: 100%;
+}
+
+.layout-img-2 {
+  width: 100%;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  color: #4f4f4f;
+}
+
+.example-box {
+  width: 100%;
+  height: 60px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.desktop-nav {
+  position: relative;
+}
+
+.filter .flex-row {
+  margin-bottom: 0;
+}
+
+.chart-control .flex-row {
+  margin-bottom: 0;
+}
+
+.field .flex-row {
+  margin-bottom: 0;
+}
+
+.well .flex-row {
+  margin-bottom: 0;
+}
+
+.btn_gotop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.4375rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  position: fixed;
+  right: 1em;
+  bottom: -60px;
+  z-index: 99;
+  opacity: 0;
+  transition: all 0.3s;
+  background-color: #CBCBCB;
+  color: #222A32;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  box-sizing: border-box;
+  min-height: auto;
+}
+
+.btn_gotop.show {
+  opacity: 1;
+  bottom: 60px;
+}
+
+.btn_gotop::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 5px 6px 5px;
+  border-color: transparent transparent #222A32 transparent;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #d2d2d2;
+  padding: 1rem;
+}
+
+.header-wrap {
+  position: relative;
+}
+
+.desktop-nav,
+.mobile-nav {
+  position: relative;
+}
+
+.mobile-menu {
+  position: absolute;
+}
+
+.allsearch-panel .flex-row, .mobile-search .flex-row {
+  margin-bottom: 0;
+}
+
+.table-container + .table-container {
+  margin-top: 1.5rem;
+}
+
+.textpage-pagination .flex-row {
+  margin-bottom: 0;
+}/*# sourceMappingURL=guideline.css.map */

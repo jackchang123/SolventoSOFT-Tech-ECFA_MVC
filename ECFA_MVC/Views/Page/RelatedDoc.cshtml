@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDetail.cshtml";
+    ViewData["Title"] = Model.NtTitle;
+}
+@model ECFA_MVC.Models.RelatedDoc
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@Model.NtTitle</h2>
+</div>
+
+
+@Html.Raw(Model.NtContent)
+
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+}

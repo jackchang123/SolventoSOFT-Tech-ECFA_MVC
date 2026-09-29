@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewData["Title"] = ViewBag.TitleName;
+}
+@using ECFA_MVC.Models.DTOs
+@model List<ServiceGroupDto>
+
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@ViewBag.TitleName</h2>
+</div>
+
+<!-- 資料列表表格 -->
+<div class="content flex-row gap-24 column" id="data-table-body">
+    @{
+        int mainIndex = 1;
+    }
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var group in Model)
+        {
+            string currentPrefix = $"{mainIndex}.";
+            <div class="flex-row column gap-16">
+                <!-- 渲染大標題 (ntId 為 1, 7, 24) -->
+                <p class="content-subtitle">@currentPrefix @group.ntTitle</p>
+
+                <div class="document-box">
+                    <ul class="document-list list-style-disc">
+                        <!-- 渲染各自的子項目 -->
+                        @foreach (var item in group.Children)
+                        {
+                            // 自動擷取副檔名，用來動態產生 title 提示字尾
+                            string extension = System.IO.Path.GetExtension(item.ntTitle).ToLower().Replace(".", "");
+                            string downloadHint = string.IsNullOrEmpty(extension) ? "檔案下載" : $"{extension}檔案下載";
+                            string fileLink = $"/api/download?Id={item.ntId}&T=service";
+                            <li>
+                                <!-- 請將 href 替換為你實際的下載端點路由，例如傳入字首 id -->
+                                <a href="@fileLink" target="_blank" title="@item.ntTitle（@downloadHint）">
+                                    @item.ntTitle
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            mainIndex++;
+        }
+    }
+    else
+    {
+        <p>目前尚無相關資料。</p>
+    }
+</div>
+
+@section Styles {
+    <script src="~/js/main.js"></script>
+}

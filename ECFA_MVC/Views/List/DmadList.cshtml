@@ -1,0 +1,160 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutList.cshtml";
+    ViewData["Title"] = ViewBag.TitleName;
+}
+
+<!-- 標題列 -->
+<div class="title-row">
+    <h2>@ViewBag.TitleName</h2>
+</div>
+
+<!-- 資料列表表格 -->
+<div class="propaganda">
+    <ul id="data-ul-body">
+
+    </ul>
+</div>
+<!-- 分頁容器（必須保留原 ID，供 main.js 偵測） -->
+<div class="pagination-wrapper" role="navigation" aria-label="頁碼分頁">
+    <ul id="pagination-container" class="pagination"></ul>
+</div>
+
+@section Styles {
+    <script>
+        $(document).ready(function () {
+            let currentPage = sessionStorage.getItem("faq_current_page") 
+                              ? parseInt(sessionStorage.getItem("faq_current_page")) 
+                              : 1;
+            let categorySelect = sessionStorage.getItem("faq_categorySelect") 
+                              ? parseInt(sessionStorage.getItem("faq_categorySelect")) 
+                              : -1;
+            $('#categorySelect').val(categorySelect);
+
+            $('#categorySelect').on('change', function() {
+                // 當切換分類時，必須視為「第一次載入」，重新撈取第 1 頁並重建分頁
+                loadPageData(1, true);
+            });
+            // 網頁一載入，自動讀取第 1 頁
+            loadPageData(currentPage, true);
+        });
+
+        // 負責發送 Ajax 撈資料的統一函式
+        function loadPageData(pageNumber, isFirstLoad) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ntCategory = parseInt(urlParams.get('c'), 10);
+            const c = isNaN(ntCategory) ? '' : ntCategory;
+            $.ajax({
+                url: '@Url.Action("GetDMAdList", "DMAd")',
+                data: { c: c, pageNumber: pageNumber, pageSize: 10 },
+                type: 'GET',
+                success: function (response) {
+                    // 1. 渲染您的 Table 資料畫面
+                    renderTable(response.items);
+
+                    // 2. 如果是第一次載入，拿到真正的 totalCount 後，再去初始化分頁套件
+                    if (isFirstLoad) {
+                        initPaginationWithRealCount(response.totalCount);
+                    }
+                }
+            });
+        }
+
+        // 動態傳入實體總筆數，並初始化分頁
+        function initPaginationWithRealCount(realTotalCount) {
+            const $container = $("#pagination-container");
+            const itemsOnPage = 10;
+            const maxPageVisibleItems = $(window).width() >= 992 ? 10 : 6;
+
+            // 清空舊的分頁 UI（避免重複初始化產生衝突）
+            $container.empty();
+
+            // 實例化套件
+            const pagination = new Pagination({
+                container: $container,
+                maxVisibleElements: maxPageVisibleItems,
+                showInput: false,
+                enhancedMode: false,
+                pageClickCallback: function (pageNumber) {
+                    // 點擊非第一頁的頁碼時，只撈資料，不需要重複初始化分頁
+                    loadPageData(pageNumber, false);
+                    sessionStorage.setItem("faq_current_page", pageNumber); 
+                    // 執行您原本在 Main.js 裡的 UI 優化邏輯...
+                    if (typeof updateAriaCurrent === 'function') {
+                        updateAriaCurrent(pageNumber);
+                    }
+                }
+            });
+
+            // 完美注入後端傳來的實體總筆數！
+            pagination.make(realTotalCount, itemsOnPage);
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "-";
+            const date = new Date(dateStr);
+
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0'); // 月份從 0 開始，需 +1
+            const dd = String(date.getDate()).padStart(2, '0');
+
+            return `${yyyy}/${mm}/${dd}`; // 產出如: 2026-07-30
+        }
+
+        // 渲染 Table 的實作（請依您的欄位名稱調整）
+        function renderTable(dataList) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentNid = parseInt(urlParams.get('nid'), 10);
+            const safeNid = isNaN(currentNid) ? '' : currentNid;
+
+            const $ul = $("#data-ul-body");
+            $ul.empty(); // 先清空舊資料
+
+            $.each(dataList, function(index, item) {
+                const formattedDate = formatDate(item.ntPubDate);
+                // 1. 建立結構骨架，變數留空
+                const $li = $(`
+                    <li>
+                        <a href="#" class="propaganda-item" title="">
+                                    <img src="" alt="" class="img" loading="lazy">
+                            <div class="text">
+                                <span class="pub-date">發布日期：</span>
+                                <span class="file-name"></span>
+                            </div>
+                        </a>
+                    </li>
+                `);
+
+                const fileParams = new URLSearchParams();
+                fileParams.set('Id', item.ntId || '');
+                fileParams.set('T', 'DMAd');
+                fileParams.set('Type', '1');
+                const imgParams = new URLSearchParams();
+                imgParams.set('Id', item.ntId || '');
+                imgParams.set('T', 'DMAd');
+                imgParams.set('Type', '2'); 
+                const fileLink = `/api/download?${fileParams.toString()}`
+                const imgLink = `/api/download?${imgParams.toString()}`
+
+                // 2. 假設您的 item 物件包含 url, title, imgUrl, date 等欄位
+                // 使用 jQuery 方法安全地注入屬性與文字（會自動進行 HTML 轉義）
+                $li.find('a').attr({
+                    'href': fileLink || '#',                        // 安全寫入連結
+                    'title': (item.ntFileName || '') + '（檔案下載）'    // 安全寫入標題
+                });
+
+                $li.find('.img').attr({
+                    'src': imgLink || '',   // 安全寫入圖片路徑
+                    'alt': item.ntFileName2 || ''                         // 安全寫入 alt 替代文字
+                });
+
+                // 使用 .text() 絕對安全，所有 HTML 標籤都會被轉為純文字
+                $li.find('.pub-date').text('發布日期：' + (formattedDate || ''));
+                $li.find('.file-name').text(item.ntFileName || '');
+
+                // 3. 將安全的元素塞入 tbody
+                $ul.append($li);
+            });
+        }
+    </script>
+    <script src="~/js/main.js"></script>
+}

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11925.98 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECFA_MVC", "ECFA_MVC\ECFA_MVC.csproj", "{702FFDAE-042E-4981-BB64-488A7B313366}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{702FFDAE-042E-4981-BB64-488A7B313366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{702FFDAE-042E-4981-BB64-488A7B313366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{702FFDAE-042E-4981-BB64-488A7B313366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{702FFDAE-042E-4981-BB64-488A7B313366}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4CE9E51-6364-4BDD-AFB0-99123C609AC3}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,26 @@
+﻿@model List<ECFA_MVC.ViewModels.MenuViewModel>
+
+<div class="breadcrumb">
+    <img src="~/images/icon_breadcrumb.svg" alt="" class="icon">
+    <ul>
+        <li><a href="/">首頁</a></li>
+        @{
+            int index = 0;
+        }
+        @foreach (var item in Model)
+        {
+            var isLast = (index == Model.Count - 1);
+            index++; // 每次迴圈結束累加 1
+            if (isLast)
+            {
+                <li>@item.Title</li>
+            }
+            else
+            {
+                <li>@item.Title</li>
+                @* <li><a href="@item.Url">@item.Title</a></li> *@
+            }
+        }
+    </ul>
+</div>
+

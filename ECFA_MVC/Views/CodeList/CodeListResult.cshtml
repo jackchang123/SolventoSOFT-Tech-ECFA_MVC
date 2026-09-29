@@ -1,0 +1,213 @@
+﻿@model List<ECFA_MVC.Models.DTOs.CodeListDto>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "早收清單降稅查詢";
+    int index = 1;
+}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECFA早收清單查詢結果</title>
+    <link rel="shortcut icon" href="~/images/favicon.ico" type="image/x-icon">
+
+    <script src="~/vendors/jquery-3.7.1.min.js"></script>
+
+    <!-- 自訂樣式請置於最後，以免樣式被覆蓋 -->
+    <link rel="stylesheet" href="~/css/component.css">
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+
+<body>
+
+    <div class="full-wrap">
+        <a href="#key_C" class="goMainContent" title="跳到主要內容區塊" tabindex="1">跳到主要內容區塊</a>
+
+        <h1 class="sr-only">ECFA兩岸經濟合作架構協議</h1>
+
+        <div class="result-table-container">
+            <a href="#key_C" id="key_C" accesskey="C" title="Alt+C 主要內容區" class="visually-hidden">:::</a>
+
+            <div class="flex-row justify-content-between align-items-center">
+                <h2 class="title">早收清單總類別查詢</h2>
+
+                <button type="button" id="backToPrev" class="button button-border-default">
+                    <img src="~/images/icon_return_black.svg" alt="" class="icon">
+                    返回前一頁
+                </button>
+            </div>
+
+            <div class="search-result-box">
+                <div class="table-container scrollTable">
+                    <table class="default-table primary-table" style="min-width: 1700px;">
+                        <caption>@ViewBag.tabletitle</caption>
+                        <thead>
+                            <tr>
+                                <th id="group-cn" scope="colgroup" colspan="6" class="text-left bg-darkblue">@(ViewBag.tag1)方面</th>
+                                <th id="group-tw" scope="colgroup" colspan="5" class="text-left bg-darkblue">@(ViewBag.tag2)方面</th>
+                                <th id="remark" scope="col" rowspan="2" class="text-left bg-darkblue"
+                                    style="width: 351px;">備註</th>
+                            </tr>
+                            <tr>
+                                <th id="cn-no" scope="col" class="text-left" style="width: 80px;">序號</th>
+                                <th id="cn-tax" scope="col" class="text-left" style="width: 110px;">稅號</th>
+                                <th id="cn-name-zh" scope="col" class="text-left" style="width: 180px;">中文貨品(簡稱)</th>
+                                <th id="cn-name-en" scope="col" class="text-left" style="width: 180px;">英文貨品(簡稱)</th>
+                                <th id="cn-rate" scope="col" class="text-right" style="width: 80px;">稅率(%)</th>
+                                <th id="cn-psr" scope="col" class="text-left" style="width: 270px;">產品特定原產地規則(PSR)</th>
+
+                                <th id="tw-ex" scope="col" class="text-left" style="width: 80px;">EX</th>
+                                <th id="tw-tax" scope="col" class="text-left" style="width: 110px;">稅號</th>
+                                <th id="tw-name-zh" scope="col" class="text-left" style="width: 180px;">中文貨品(簡稱)</th>
+                                <th id="tw-name-en" scope="col" class="text-left" style="width: 180px;">英文貨品(簡稱)</th>
+                                <th id="tw-rate" scope="col" class="text-right" style="width: 80px;">稅率(%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        @* 💡 流水號欄位：自動遞增 *@
+                                        <th id="row-@index" headers="group-cn cn-no" scope="row" class="text-left">@index</th>
+
+
+                                        @if(ViewBag.type==1)
+                                        {
+                                            @* 大陸貨品號列 *@
+                                            <td headers="row-@index group-cn cn-tax" class="text-left">
+                                                <a href="/CodeList/CodeListResult?type=@ViewBag.type&code=@item.CN_CODE" title="重新查詢@(item.CN_CODE)">@item.CN_CODE</a>
+                                            </td>
+
+                                            @* 大陸中文名稱 *@
+                                            <td headers="row-@index group-cn cn-name-zh" class="text-left">@item.CN_CNAME</td>
+
+                                            @* 大陸英文名稱 *@
+                                            <td headers="row-@index group-cn cn-name-en" class="text-left">@item.CN_ENAME</td>
+
+                                            @* 大陸關稅 *@
+                                            <td headers="row-@index group-cn cn-rate" class="text-right">@item.CN_TAX</td>
+                                        }
+                                        else if (ViewBag.type==2)
+                                        {
+                                            @* 台灣貨品號列 *@
+                                            <td headers="row-@index group-tw tw-tax" class="text-left">
+                                                <a href="/CodeList/CodeListResult?type=@ViewBag.type&code=@item.TW_CODE" title="重新查詢@(item.TW_CODE)">@item.TW_CODE</a>
+                                            </td>
+
+                                            @* 台灣中文名稱 *@
+                                            <td headers="row-@index group-tw tw-name-zh" class="text-left">@item.TW_CNAME</td>
+
+                                            @* 台灣英文名稱 *@
+                                            <td headers="row-@index group-tw tw-name-en" class="text-left">@item.TW_ENAME</td>
+
+                                            @* 台灣關稅 *@
+                                            <td headers="row-@index group-tw tw-rate" class="text-right">@item.TW_TAX</td>
+                                        }
+
+
+                                        @* 原產地規則 (PSR) *@
+                                        <td headers="row-@index group-cn cn-psr" class="text-left">@item.PSR</td>
+
+                                        @* 例外說明 (EX) 判斷：如果有資料就顯示，沒有就維持無標示 *@
+                                        <td headers="row-@index group-tw tw-ex">
+                                            @if (!string.IsNullOrEmpty(item.EX))
+                                            {
+                                                @item.EX
+                                            }
+                                            else
+                                            {
+                                                <span aria-hidden="true">&nbsp;</span>
+                                                <span class="sr-only">非EX標示（適用全部貨品）</span>
+                                            }
+                                        </td>
+
+                                        @if (ViewBag.type == 1)
+                                        {
+                                            @* 台灣貨品號列 *@
+                                            <td headers="row-@index group-tw tw-tax" class="text-left">
+                                                <a href="/CodeList/CodeListResult?type=@ViewBag.type&code=@item.TW_CODE" title="重新查詢@(item.TW_CODE)">@item.TW_CODE</a>
+                                            </td>
+
+                                            @* 台灣中文名稱 *@
+                                            <td headers="row-@index group-tw tw-name-zh" class="text-left">@item.TW_CNAME</td>
+
+                                            @* 台灣英文名稱 *@
+                                            <td headers="row-@index group-tw tw-name-en" class="text-left">@item.TW_ENAME</td>
+
+                                            @* 台灣關稅 *@
+                                            <td headers="row-@index group-tw tw-rate" class="text-right">@item.TW_TAX</td>
+                                        }
+                                        else if (ViewBag.type == 2)
+                                        {
+                                            @* 大陸貨品號列 *@
+                                            <td headers="row-@index group-cn cn-tax" class="text-left">
+                                                <a href="/CodeList/CodeListResult?type=@ViewBag.type&code=@item.CN_CODE" title="重新查詢@(item.CN_CODE)">@item.CN_CODE</a>
+                                            </td>
+
+                                            @* 大陸中文名稱 *@
+                                            <td headers="row-@index group-cn cn-name-zh" class="text-left">@item.CN_CNAME</td>
+
+                                            @* 大陸英文名稱 *@
+                                            <td headers="row-@index group-cn cn-name-en" class="text-left">@item.CN_ENAME</td>
+
+                                            @* 大陸關稅 *@
+                                            <td headers="row-@index group-cn cn-rate" class="text-right">@item.CN_TAX</td>
+                                        }
+
+                                        @* 備註 (MEMO) 判斷 *@
+                                        <td headers="row-@index remark">
+                                            @if (!string.IsNullOrEmpty(item.MEMO))
+                                            {
+                                                @item.MEMO
+                                            }
+                                            else
+                                            {
+                                                <span aria-hidden="true">&nbsp;</span>
+                                                <span class="sr-only">無備註</span>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    index++; // 💡 每跑完一圈，計數器加 1
+                                }
+                            }
+                            else
+                            {
+                                <!-- 此為無資料時的表格欄位樣式 -->
+                                <tr>
+                                    <td headers="group-cn group-tw remark" class="text-center no-info" colspan="12">暫時無查詢結果！</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-info">
+                    <p>說明：</p>
+                    <ul class="list-style-decimal">
+                        <li>
+                            臺灣方面於2023年6月23日起實施HS2022年版稅則修正方案，依據該方案之內容，ECFA早收清單項數將增加為354項，惟產品範圍不變。大陸方面於2022年1月1日起實施HS2022年版稅則修正方案，依據該方案之內容及後續關稅調整方案，ECFA早收清單項數將增加為712項，惟產品範圍不變；另大陸方面2024年1月1日起中止丙烯（29012200）等12項產品適用ECFA優惠稅率；大陸方面2024年6月15起中止潤滑油基礎油（27101993）等134項產品適用ECFA優惠稅率。
+                        </li>
+                        <li>台灣方面稅號前附有'EX'者表示對照該稅號所屬之部分貨品，稅號前未附有'EX'者表示對照該稅號所屬之全部貨品。</li>
+                        <li>本對照表所列稅號係為雙方2026年1月1日有效之稅則號別。</li>
+                        <li>序號係指2010年6月兩岸簽署ECFA之附件一所列早收產品清單的序號。</li>
+                        <li>
+                            表中雙方稅號之中、英文貨名為產品簡稱，具體產品範圍應按雙方2026年稅則相應稅號的規定辦理，至稅率係指2024年最惠國(MFN)稅率(對WTO會員之進口貨物適用稅率)僅供參考，正確稅率以雙方稅則所定者為準。
+                        </li>
+                        <li>本對照表不具法律效力，僅供參考使用。</li>
+                        <li>貨名欄空白者係因陸方尚未提供，俟後補列。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/main.js"></script>
+</body>
+
+</html>

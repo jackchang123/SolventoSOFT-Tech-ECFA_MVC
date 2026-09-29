@@ -1,0 +1,77 @@
+﻿@model List<ECFA_MVC.ViewModels.MenuViewModel>
+
+<aside class="sidebar">
+    <a href="#key_L" id="key_L" accesskey="L" title="Alt+L 左方選單區塊" class="visually-hidden">:::</a>
+    <nav aria-labelledby="sidebar-title">
+        @{
+            // 取得後端傳過來、需要展開的所有節點 ID 清單
+            var activeIds = ViewBag.ActiveNodeIds as List<int> ?? new List<int>();
+            bool isFirst = true;
+        }
+        @foreach (var item in Model)
+        {
+            if (isFirst)
+            {
+                <h2 id="sidebar-title" class="sidebar-title">
+                    @item.Title
+                </h2>
+                isFirst = false;
+            }
+            <ul class="sidebar-menu">
+            @foreach (var subItem in item.SubMenus!)
+            {
+                var l2HasSub = subItem.SubMenus != null && subItem.SubMenus.Any();
+                var isL2ActivePath = activeIds.Contains(subItem.NodeId);
+                    <li class="menu-item level-1 @(l2HasSub ? "has-submenu" : "null") @(isL2ActivePath ? "active" : "null")">
+                    @if (l2HasSub)
+                    {
+                            <button type="button" class="menu-toggle @(isL2ActivePath ? "active" : "null")" title="@subItem.Title" aria-haspopup="true" aria-expanded="@(isL2ActivePath ? "true" : "false")">
+                            <span class="txt">@subItem.Title</span>
+                                <span class="icon" aria-hidden="true"></span>
+                        </button>
+                    }
+                    else
+                    {
+                        <a href="@subItem.Url" target="@subItem.Target" class="menu-link" title="@subItem.Title">@subItem.Title</a>
+                    }
+                    @if (l2HasSub)
+                    {
+                        <ul class="submenu" aria-hidden="true">
+                            @foreach (var l3 in subItem.SubMenus!)
+                            {
+                                var l3HasSub = l3.SubMenus != null && l3.SubMenus.Any();
+                                var isL3ActivePath = activeIds.Contains(subItem.NodeId);
+                                    <li class="menu-item level-2 @(l3HasSub ? "has-submenu" : null) @(isL3ActivePath ? "active" : "null")">
+                                    @if (l3HasSub)
+                                    {
+                                            <button type="button" class="menu-toggle @(isL3ActivePath ? "active" : "null")" title="@subItem.Title" aria-haspopup="true" aria-expanded="@(isL3ActivePath ? "true" : "false")">
+                                            <span class="txt">@l3.Title</span>
+                                                <span class="icon" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <a href="@l3.Url" target="@l3.Target" class="menu-link" title="@l3.Title">@l3.Title</a>
+                                    }
+                                    @if (l3HasSub)
+                                    {
+                                        <ul class="submenu" aria-hidden="true">
+                                            @foreach (var l4 in l3.SubMenus!)
+                                            {
+                                                <li class="menu-item level-3">
+                                                    <a href="@l4.Url" target="@l4.Target" class="menu-link" title="@l4.Title">@l4.Title</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+            </ul>
+        }
+    </nav>
+</aside>
+
