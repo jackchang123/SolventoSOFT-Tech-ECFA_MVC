@@ -14,7 +14,7 @@
                 <label class="control-label">清單類別：</label>
             </div>
             <div class="field">
-                <select id="categorySelect" class="form-control" required>
+                <select id="categorySelect" class="form-control" aria-label="請選擇清單類別" title="請選擇清單類別" required>
                     <option value="2" selected>台灣 => 大陸</option>
                     <option value="1">大陸 => 台灣</option>
                 </select>
@@ -26,7 +26,7 @@
             </div>
             <div class="field">
                 <input id="codeQuery" type="text" placeholder="請輸入陸方號列(大陸降稅) ，2-8碼貨品號列，例如：04、0403"
-                       class="form-control" autocomplete="off">
+                       class="form-control" aria-label="請輸入陸方號列(大陸降稅) ，2-8碼貨品號列，例如：04、0403" title="請輸入陸方號列" autocomplete="off">
                 <span class="error-prompt">輸入錯誤！</span>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <label class="control-label">貨品名稱：</label>
             </div>
             <div class="field">
-                <input id="nameQuery" type="text" placeholder="請輸入貨品名稱關鍵字，例如：米、魚" class="form-control" value="" autocomplete="off">
+                <input id="nameQuery" type="text" placeholder="請輸入貨品名稱關鍵字，例如：米、魚" class="form-control" value="" aria-label="請輸入貨品名稱關鍵字，例如：米、魚" title="請輸入貨品名稱關鍵字" autocomplete="off">
                 <span class="error-prompt">輸入錯誤！</span>
             </div>
         </div>

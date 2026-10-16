@@ -15,7 +15,7 @@
                 <label class="control-label">面向：</label>
             </div>
             <div class="field">
-                <select class="form-control" name="categoryId1" id="categorySelect1">
+                <select class="form-control" name="categoryId1" id="categorySelect1" aria-label="請選擇面向" title="請選擇面向">
                     <option value="-1" selected>全部面向</option>
                     @if (ViewData["Categories"] is List<SelectListItem> categories)
                     {
@@ -32,7 +32,7 @@
                 <label class="control-label">類別：</label>
             </div>
             <div class="field">
-                <select class="form-control" name="categoryId2" id="categorySelect2">
+                <select class="form-control" name="categoryId2" id="categorySelect2" aria-label="請選擇類別" title="請選擇類別">
                     <option value="-1" selected>全部類別</option>
                 </select>
             </div>
@@ -67,9 +67,10 @@
 @section Styles {
     <script>
         $(document).ready(function () {
-            let currentPage = sessionStorage.getItem("faq_current_page") 
-                              ? parseInt(sessionStorage.getItem("faq_current_page")) 
-                              : 1;
+            // let currentPage = sessionStorage.getItem("faq_current_page") 
+            //                   ? parseInt(sessionStorage.getItem("faq_current_page")) 
+            //                   : 1;
+            let currentPage = 1;
             $('#categorySelect1').on('change', async function() {
                 // 當切換分類時，必須視為「第一次載入」，重新撈取第 1 頁並重建分頁
                 var selectedCategory1 = $('#categorySelect1').val();
@@ -146,7 +147,7 @@
                 pageClickCallback: function (pageNumber) {
                     // 點擊非第一頁的頁碼時，只撈資料，不需要重複初始化分頁
                     loadPageData(pageNumber, false);
-                    sessionStorage.setItem("faq_current_page", pageNumber); 
+                    //sessionStorage.setItem("faq_current_page", pageNumber); 
                     // 執行您原本在 Main.js 裡的 UI 優化邏輯...
                     if (typeof updateAriaCurrent === 'function') {
                         updateAriaCurrent(pageNumber);

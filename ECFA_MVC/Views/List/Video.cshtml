@@ -22,9 +22,10 @@
 @section Styles {
     <script>
         $(document).ready(function () {
-            let currentPage = sessionStorage.getItem("faq_current_page") 
-                              ? parseInt(sessionStorage.getItem("faq_current_page")) 
-                              : 1;
+            // let currentPage = sessionStorage.getItem("faq_current_page") 
+            //                   ? parseInt(sessionStorage.getItem("faq_current_page")) 
+            //                   : 1;
+            let currentPage = 1;
 
             loadPageData(currentPage, true);
         });

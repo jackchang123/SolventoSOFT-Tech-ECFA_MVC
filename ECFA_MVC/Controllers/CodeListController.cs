@@ -16,15 +16,21 @@ namespace ECFA_MVC.Controllers
         [Route("CategoryListResult")]
         public IActionResult CategoryListResult(int nid)
         {
+
+            ViewBag.TitleName = "早收清單總類別查詢";
             return View();
         }
         [Route("CodeList")]
-        public IActionResult CodeList(int nid,int type)
+        public IActionResult CodeList(int type)
         {
             if (!(type == 1 || type == 2))
             {
                 return NotFound();
             }
+            if (type == 1)
+                ViewBag.TitleName = "出口至大陸貨品號列";
+            else if (type == 2)
+                ViewBag.TitleName = "大陸出口至我國貨品號";
             return View();
         }
         [HttpGet]
@@ -49,12 +55,11 @@ namespace ECFA_MVC.Controllers
                 ViewBag.tag2 = "大陸";
             }
 
-
             List<CodeListDto> resultList = new List<CodeListDto>();
 
             if (type == 1)
             {
-                var query = _context.CodeList539s.AsQueryable();
+                var query = _context.CodeList267s.AsQueryable();
 
                 if (!string.IsNullOrEmpty(code))
                     query = query.Where(x => x.TwCode != null && x.TwCode.Replace("EX", "").StartsWith(code)
@@ -89,7 +94,7 @@ namespace ECFA_MVC.Controllers
             }
             else if (type == 2)
             {
-                var query = _context.CodeList267s.AsQueryable();
+                var query = _context.CodeList539s.AsQueryable();
 
                 if (!string.IsNullOrEmpty(code))
                     query = query.Where(x => x.TwCode != null && x.TwCode.Replace("EX", "").StartsWith(code)

@@ -76,7 +76,6 @@
                 pageClickCallback: function(pageNumber) {
                     // 點擊非第一頁的頁碼時，只撈資料，不需要重複初始化分頁
                     loadPageData(pageNumber, false);
-                    sessionStorage.setItem("faq_current_page", pageNumber);
                     // 執行您原本在 Main.js 裡的 UI 優化邏輯...
                     if (typeof updateAriaCurrent === 'function') {
                         updateAriaCurrent(pageNumber);

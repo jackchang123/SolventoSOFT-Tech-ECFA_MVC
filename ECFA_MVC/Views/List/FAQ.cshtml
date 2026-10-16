@@ -15,7 +15,7 @@
                 <label class="control-label">分類：</label>
             </div>
             <div class="field">
-                <select class="form-control" name="categoryId" id="categorySelect">
+                <select class="form-control" name="categoryId" id="categorySelect" aria-label="請選擇分類" title="請選擇分類">
                     <option value="-1" selected>全部類別</option>
                     @if (ViewData["Categories"] is List<SelectListItem> categories)
                     {
@@ -57,9 +57,10 @@
 @section Styles {
     <script>
         $(document).ready(function () {
-            let currentPage = sessionStorage.getItem("faq_current_page") 
-                              ? parseInt(sessionStorage.getItem("faq_current_page")) 
-                              : 1;
+            // let currentPage = sessionStorage.getItem("faq_current_page") 
+            //                   ? parseInt(sessionStorage.getItem("faq_current_page")) 
+            //                   : 1;
+            let currentPage = 1;
             let categorySelect = sessionStorage.getItem("faq_categorySelect") 
                               ? parseInt(sessionStorage.getItem("faq_categorySelect")) 
                               : -1;

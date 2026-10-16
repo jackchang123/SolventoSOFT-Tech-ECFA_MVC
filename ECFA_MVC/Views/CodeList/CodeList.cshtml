@@ -26,7 +26,7 @@
                     </label>
                 </div>
                 <div class="field">
-                    <input type="text" name="code" placeholder="請輸入2-8碼貨品號列" class="form-control" value="" autocomplete="off">
+                    <input type="text" name="code" placeholder="請輸入2-8碼貨品號列" class="form-control" aria-label="請輸入2-8碼貨品號列" title="查詢" value="" autocomplete="off">
                     <span class="error-prompt">輸入錯誤！</span>
                 </div>
             </div>
@@ -37,11 +37,11 @@
         <div class="download-file">
             @if (Context.Request.Query["type"] == "1")
             {
-                <a href="/api/dowload?path=ECFADoc/ECFA早收清單大陸方面減讓稅號對照台灣方面稅號2026版20251230.ods" title="ECFA早收清單大陸方面減讓稅號對照台灣方面稅號.ods（ods檔案下載）">ECFA早收清單大陸方面減讓稅號對照台灣方面稅號</a>
+                <a href="/api/download/file?path=ECFADoc/ECFA早收清單大陸方面減讓稅號對照台灣方面稅號2026版20251230.ods" title="ECFA早收清單大陸方面減讓稅號對照台灣方面稅號.ods（ods檔案下載）">ECFA早收清單大陸方面減讓稅號對照台灣方面稅號</a>
             }
             else if (Context.Request.Query["type"] == "2")
             {
-                <a href="/api/dowload?path=ECFADoc/ECFA早收清單台灣方面減讓稅號對照大陸方面稅號2026版20251230.ods" title="ECFA早收清單台灣方面減讓稅號對照大陸方面稅號.ods（ods檔案下載）">ECFA早收清單台灣方面減讓稅號對照大陸方面稅號</a>
+                <a href="/api/download/file?path=ECFADoc/ECFA早收清單台灣方面減讓稅號對照大陸方面稅號2026版20251230.ods" title="ECFA早收清單台灣方面減讓稅號對照大陸方面稅號.ods（ods檔案下載）">ECFA早收清單台灣方面減讓稅號對照大陸方面稅號</a>
             }
         </div>
     </div>
